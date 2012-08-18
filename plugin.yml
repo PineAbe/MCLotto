@@ -1,0 +1,13 @@
+name: MCLotto
+main: me.pineabe.modernmc.MineCraftLotto
+version: 3.3
+description: 
+             Lotto
+commands:
+  Lotto:
+    description: Lotto
+permissions:
+  lotto.admin:
+    description: Gives access to all lotto commands
+  lotto.user:
+    description: Gives access to all user lotto commands

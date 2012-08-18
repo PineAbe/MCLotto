@@ -1,2 +1,3 @@
 MCLotto
 =======
+MineCraft's lotto!
