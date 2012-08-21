@@ -147,7 +147,9 @@ public class MineCraftLotto extends JavaPlugin {
 	    					if(getConfig().getString("LottoEnabled") == "false"){
     						player.sendMessage(ChatColor.RED +"The lotto has not started yet!");
     					}
-	    					    						
+	    					else if(Integer.parseInt(args[1]) > getConfig().getInt("MaxTicketsForSale")){
+	    						player.sendMessage(ChatColor.RED + "This ticket is not for sale!");
+	    					}    						
 	    					
 	    					else if(r.transactionSuccess()) {
 	    						if(!args[1].equalsIgnoreCase(getConfig().getString("WinningNumber"))){

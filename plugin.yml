@@ -1,6 +1,6 @@
 name: MCLotto
 main: me.pineabe.modernmc.MineCraftLotto
-version: 3.3
+version: 3.4
 description: 
              Lotto
 commands:
@@ -11,3 +11,5 @@ permissions:
     description: Gives access to all lotto commands
   lotto.user:
     description: Gives access to all user lotto commands
+  lotto.set:
+    description: Allows user to set jackpot's, fares and tickets
