@@ -1,7 +1,5 @@
 #Config.yml file for MCLotto
-LottoEnabled: true
 Jackpot: 1000
 TicketsForSale: 50
 TicketFare: 200
-WinningNumber: 0
 TicketsForSale: 50
