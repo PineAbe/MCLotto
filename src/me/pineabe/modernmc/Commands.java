@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.milkbowl.vault.economy.Economy;
-//import net.milkbowl.vault.economy.EconomyResponse;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Commands implements CommandExecutor {
     public final Plugin plugin;
@@ -23,13 +24,15 @@ public class Commands implements CommandExecutor {
     public final HashMap<Player, Integer> hm = new HashMap<Player, Integer>();
     public final HashMap<String, Integer> map = new HashMap<String, Integer>();
     
-  public Commands(Plugin plugin){
+	public Commands(Plugin plugin){
     	this.plugin = plugin;
     }
 	@Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String args[]){
     	Player p = (Player) sender;
-        //EconomyResponse r = econ.withdrawPlayer(p.getName(), plugin.getConfig().getInt("TicketFare"));
+    	RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        econ = rsp.getProvider();
+        EconomyResponse r = econ.withdrawPlayer(p.getName(), plugin.getConfig().getInt("TicketFare"));
         int wn = new Random().nextInt(plugin.getConfig().getInt("TicketsForSale"));
         int jackpot = plugin.getConfig().getInt("Jackpot");
         int fare = plugin.getConfig().getInt("TicketFare");
@@ -106,8 +109,7 @@ public class Commands implements CommandExecutor {
     					else if(hm.containsKey(p)){
     					p.sendMessage(ChatColor.RED + "Error: You have already purchased a ticket");	
     					}
-    					//else if(r.transactionSuccess()) {
-    					else {
+    					else if(r.transactionSuccess()) {
     						List<Player> onlinePlayers = Arrays.asList(Bukkit.getServer().getOnlinePlayers());
         		   			Iterator<Player> iterator = onlinePlayers.iterator();
         		   			while(iterator.hasNext()){
@@ -126,13 +128,9 @@ public class Commands implements CommandExecutor {
             		   			Bukkit.broadcastMessage(ChatColor.GREEN + p.getDisplayName() + " has won the lotto with the jackpot of " + jackpot + " " + econ.currencyNamePlural() );
             		   		}
     					}
-    					//}
-	    					//else {
-	    		                //p.sendMessage(String.format(ChatColor.RED + "An error occured: %s", r.errorMessage));
-	    		            //}
-    					
-    					
-    					
+	    					else {
+	    		               p.sendMessage(String.format(ChatColor.RED + "An error occured: %s", r.errorMessage));
+	    		           }
     				}
     			}
     			else if(args[0].equalsIgnoreCase("setjackpot")){
