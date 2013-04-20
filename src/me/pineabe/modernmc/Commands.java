@@ -45,19 +45,20 @@ public class Commands implements CommandExecutor {
     			if(p.hasPermission("lotto.admin")){
 
 	        		p.sendMessage(ChatColor.GREEN + "------(MCLotto Help)------");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto buyticket (1 - " + plugin.getConfig().getInt("TicketsForSale") + ") " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Purchase a lotto ticket");	
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto jackpot " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Shows the current jackpot and ticketfare");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto start " + ChatColor.WHITE + "|" + ChatColor.AQUA +  " Selects a random number and allows tickets to be bought");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto stop " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Stop ticket sales and disallow the winner");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto setjackpot " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the jackpot using in-game commands");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto setfare " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the ticket fare with in-game commands");
-	        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto setmaxtickets " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the max ticket number with in-game commands");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto buyticket (1 - " + plugin.getConfig().getInt("TicketsForSale") + ") " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Purchase a lotto ticket");	
+	        		p.sendMessage(ChatColor.AQUA + "/lotto jackpot " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Shows the current jackpot and ticketfare");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto start " + ChatColor.WHITE + "|" + ChatColor.AQUA +  " Begin a lotto");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto stop " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Stop ticket sales and disallow a winner");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto itemlotto <itemid> <amount> " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Create an item lotto");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto setjackpot <amount> " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the jackpot");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto setfare <amount> " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the ticket fare");
+	        		p.sendMessage(ChatColor.AQUA + "/lotto setmaxtickets <amount> " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Set the max ticket number");
 	    		}
     			
     		else if(p.hasPermission("lotto.user")){
         		p.sendMessage(ChatColor.GREEN + "------(MCLotto Help)------");
-        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto buyticket (1 - " + plugin.getConfig().getInt("TicketsForSale") + ") " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Purchase a lotto ticket");
-        		p.sendMessage(ChatColor.DARK_GREEN + "/lotto jackpot " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Shows the current jackpot and ticketfare");
+        		p.sendMessage(ChatColor.AQUA + "/lotto buyticket (1 - " + plugin.getConfig().getInt("TicketsForSale") + ") " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Purchase a lotto ticket");
+        		p.sendMessage(ChatColor.AQUA + "/lotto jackpot " + ChatColor.WHITE + "|" + ChatColor.AQUA + " Shows the current jackpot and ticketfare");
     		}
     	}
     		else if(args.length == 1 ){
