@@ -11,10 +11,13 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+//import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -80,25 +83,37 @@ public class Commands implements CommandExecutor {
     	            		p.sendMessage(ChatColor.RED + "The lotto has not started yet!");
             			}
     					else{
-    						p.sendMessage(ChatColor.YELLOW + "The jackpot is: " + jackpot + " " + econ.currencyNamePlural());
+    						if(!map.containsKey("il")){
+    						   p.sendMessage(ChatColor.YELLOW + "The jackpot is: " + jackpot + " " + econ.currencyNamePlural());
+    						}
+    						else{
+    							p.sendMessage(ChatColor.GREEN + p.getDisplayName() + "The jackpot is " + ChatColor.AQUA + "Item: " + ChatColor.GREEN + String.valueOf(map.get("i")) + ChatColor.AQUA + " Amount: " + ChatColor.GREEN + String.valueOf(map.get("ia")));
+    						}
     						p.sendMessage(ChatColor.YELLOW + "The ticket fare is: " + fare + " " + econ.currencyNamePlural());
     						}
-    				}
+    					}
     			}
-    			if(args[0].equalsIgnoreCase("start")){
+    			else if(args[0].equalsIgnoreCase("start")){
                     if(p.hasPermission("lotto.admin")){
     				if(!map.containsKey("le")){
-    		   		map.put("le", null);
-    		   		map.put("wn", wn);
-    		   		p.sendMessage(ChatColor.YELLOW + "You have now started a lotto with the winning number as " + wn);
-    				Bukkit.broadcastMessage(ChatColor.GOLD + "A lotto has now commenced! (/lotto)");
+    					map.put("le", null);
+    					map.put("wn", wn);
+    					p.sendMessage(ChatColor.YELLOW + "You have now started a lotto with the winning number as " + wn);
+    					Bukkit.broadcastMessage(ChatColor.GOLD + "A lotto has now commenced! (/lotto)");
+    					Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
+    						public void run(){
+    							if(map.containsKey("le")){
+    								Bukkit.broadcastMessage(ChatColor.GOLD + "A lotto is currently occuring (/lotto)");
+    							}
+    						}
+    					}, 1200L, 1200L);
     				}
     				else{
         				p.sendMessage(ChatColor.RED + "The Lotto has already started");
         			}
-    				}
     			}
-    			}
+    		}
+    	}
     		else if(args.length == 2){
     			if(args[0].equalsIgnoreCase("buyticket")){
     				
@@ -123,10 +138,20 @@ public class Commands implements CommandExecutor {
                 		   		hm.put(p, Integer.parseInt(args[1]));
         						}
         		   			else{
-            		   			econ.depositPlayer(p.getName(), jackpot);
-            		   			map.remove("le");
-            		   			Bukkit.broadcastMessage(ChatColor.GREEN + p.getDisplayName() + " has won the lotto with the jackpot of " + jackpot + " " + econ.currencyNamePlural() );
-            		   		}
+        		   				if(!map.containsKey("il")){
+        		   				    econ.depositPlayer(p.getName(), jackpot);
+            		   			    map.remove("le");
+            		   			    Bukkit.broadcastMessage(ChatColor.GREEN + p.getDisplayName() + " has won the lotto with the jackpot of " + jackpot + " " + econ.currencyNamePlural() );
+        		   				}
+        		   				else{
+        		   					PlayerInventory pi = p.getInventory();
+        							ItemStack stack = new ItemStack(map.get("i"), map.get("ia"));
+        							pi.addItem(stack);
+        							Bukkit.broadcastMessage(ChatColor.GREEN + p.getDisplayName() + " has won the lotto with the jackpot " + ChatColor.AQUA + "Item: " + ChatColor.GREEN + String.valueOf(map.get("i")) + ChatColor.AQUA + " Amount: " + ChatColor.GREEN + String.valueOf(map.get("ia")));
+        							map.remove("il");
+        							map.remove("le");
+        		   				}
+        		   			}
     					}
 	    					else {
 	    		               p.sendMessage(String.format(ChatColor.RED + "An error occured: %s", r.errorMessage));
@@ -156,11 +181,45 @@ public class Commands implements CommandExecutor {
     			}
     		}
     		else if(args.length >= 3) {
-    		p.sendMessage(ChatColor.RED + "Syntax Error: Unrecognized argument " + args[2]);	
+    			if(args[0].equalsIgnoreCase("itemlotto")){
+    				if(p.hasPermission("lotto.set")){
+    					if(isInt(args[1]) && isInt(args[2])){
+    						if(!map.containsKey("il")) {
+    							map.put("i", Integer.parseInt(args[1]));
+    							map.put("ia", Integer.parseInt(args[2]));
+                                p.sendMessage(ChatColor.AQUA + "ItemLotto" + ChatColor.YELLOW + " mode activated. /lotto start to continue");
+    				            map.put("il", 1);
+    						}
+    						/*else if(!isInt(args[1]) && isInt(args[2])){
+    							String material = args[1];
+    							if(Material.matchMaterial(material) != null) {
+    								map.put("i", Integer.parseInt("material"));
+    								map.put("ia", Integer.parseInt(args[2]));
+    								}
+    							else{
+    								p.sendMessage(ChatColor.RED + "Unknown material: " + args[1]);
+    							}	 
+    						}*/
+    						else{
+    							p.sendMessage(ChatColor.RED + "Syntax Error: /lotto itemlotto <itemid> <amount>");
+    						}
+    			    }
+    			}
+    		}	
+    	}
+    		else if(args.length >= 4) {
+    			p.sendMessage(ChatColor.RED + "Unknown argument" + args[3]);
     		}
-    		}
+    }
 		return false;
    }
 
-
+    	public static boolean isInt(String s) {
+    	    try {
+    	        Integer.parseInt(s);
+    	    } catch (NumberFormatException nfe) {
+    	        return false;
+    	    }
+    	    return true;
+    	}
 }
